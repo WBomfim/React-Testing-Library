@@ -6,12 +6,12 @@ import App from '../App';
 import Pokemon from '../components/Pokemon';
 import pokemons from '../data';
 
+const pokemon = pokemons[0];
+let favorite = false;
+
 describe('Testes do componente "Pokemon"', () => {
   it('Verifica  se é renderizado um card com as informações de determinado pokémon',
     () => {
-      const pokemon = pokemons[0];
-      const favorite = false;
-
       renderWithRouter(<Pokemon pokemon={ pokemon } isFavorite={ favorite } />);
 
       const pokemonName = screen.getByTestId('pokemon-name');
@@ -33,9 +33,6 @@ describe('Testes do componente "Pokemon"', () => {
 
   it('Verifica se o card do pokémon contém um link para exibir detalhes deste pokémon',
     () => {
-      const pokemon = pokemons[0];
-      const favorite = false;
-
       renderWithRouter(<Pokemon pokemon={ pokemon } isFavorite={ favorite } />);
 
       const pokemonDetailsLink = screen.getByRole('link', { name: 'More details' });
@@ -62,9 +59,6 @@ describe('Testes do componente "Pokemon"', () => {
 
   it('Verifica se a URL exibida no navegador muda para o pokemon que está em exibição',
     () => {
-      const pokemon = pokemons[0];
-      const favorite = false;
-
       const { history } = renderWithRouter(
         <Pokemon pokemon={ pokemon } isFavorite={ favorite } />,
       );
@@ -75,4 +69,16 @@ describe('Testes do componente "Pokemon"', () => {
       const { location: { pathname } } = history;
       expect(pathname).toBe(`/pokemons/${pokemon.id}`);
     });
+
+  it('Verifica se o card do pokémon contém um ícone de favorito', () => {
+    favorite = true;
+
+    renderWithRouter(<Pokemon pokemon={ pokemon } isFavorite={ favorite } />);
+
+    const pokemonFavoriteIcon = screen.getByRole(
+      'img', { name: `${pokemon.name} is marked as favorite` },
+    );
+    expect(pokemonFavoriteIcon).toBeInTheDocument();
+    expect(pokemonFavoriteIcon).toHaveAttribute('src', '/star-icon.svg');
+  });
 });
