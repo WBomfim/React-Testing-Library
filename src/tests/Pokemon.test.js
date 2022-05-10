@@ -6,7 +6,7 @@ import App from '../App';
 import Pokemon from '../components/Pokemon';
 import pokemons from '../data';
 
-describe('Testes do componente "Pokemon', () => {
+describe('Testes do componente "Pokemon"', () => {
   it('Verifica  se é renderizado um card com as informações de determinado pokémon',
     () => {
       const pokemon = pokemons[0];
@@ -58,5 +58,21 @@ describe('Testes do componente "Pokemon', () => {
         'heading', { name: `Game Locations of ${pokemons[0].name}` },
       );
       expect(pokemonLocationTitle).toBeInTheDocument();
+    });
+
+  it('Verifica se a URL exibida no navegador muda para o pokemon que está em exibição',
+    () => {
+      const pokemon = pokemons[0];
+      const favorite = false;
+
+      const { history } = renderWithRouter(
+        <Pokemon pokemon={ pokemon } isFavorite={ favorite } />,
+      );
+
+      const pokemonDetailsLink = screen.getByRole('link', { name: 'More details' });
+      userEvent.click(pokemonDetailsLink);
+
+      const { location: { pathname } } = history;
+      expect(pathname).toBe(`/pokemons/${pokemon.id}`);
     });
 });
