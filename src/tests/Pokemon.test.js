@@ -28,4 +28,15 @@ describe('Testes do componente "Pokemon', () => {
       const pokemonImage = screen.getByRole('img', { name: `${pokemon.name} sprite` });
       expect(pokemonImage).toHaveAttribute('src', pokemon.image);
     });
+
+  it('Verifica se o card do pokémon contém um link para exibir detalhes deste pokémon',
+    () => {
+      const pokemon = pokemons[0];
+      const favorite = false;
+
+      renderWithRouter(<Pokemon pokemon={ pokemon } isFavorite={ favorite } />);
+
+      const pokemonDetailsLink = screen.getByRole('link', { name: 'More details' });
+      expect(pokemonDetailsLink).toHaveAttribute('href', `/pokemons/${pokemon.id}`);
+    });
 });
