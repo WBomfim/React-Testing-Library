@@ -28,7 +28,7 @@ describe('Testes do componente "Pokedex', () => {
         const pokemonImg = screen.getByRole('img', { name: `${pokemon.name} sprite` });
         expect(pokemonName).toBeInTheDocument();
         expect(pokemonImg).toBeInTheDocument();
-        expect(pokemonImg.src).toBe(pokemons[index].image);
+        expect(pokemonImg.src).toBe(pokemon.image);
         userEvent.click(button);
 
         if (index === pokemons.length - 1) {
@@ -40,10 +40,41 @@ describe('Testes do componente "Pokedex', () => {
         }
       });
     });
+
   it('Verifica se é mostrado apenas um pokémon por vez', () => {
     renderWithRouter(<App />);
 
     const pokemonName = screen.getAllByTestId('pokemon-name');
     expect(pokemonName).toHaveLength(1);
+  });
+
+  it('Verifica se a Pokédex tem os botões de filtro', () => {
+    renderWithRouter(<App />);
+
+    const pokemonsType = [...new Set(pokemons
+      .reduce((types, { type }) => [...types, type], []))];
+    const getAllButtons = screen.getAllByTestId('pokemon-type-button');
+    expect(getAllButtons).toHaveLength(pokemonsType.length);
+
+    pokemonsType.forEach((type) => {
+      const button = screen.getByRole('button', { name: type });
+      expect(button).toBeInTheDocument();
+    });
+
+    const buttonAll = screen.getByRole('button', { name: /All/i });
+    expect(buttonAll).toBeInTheDocument();
+
+    const pokemonsFire = pokemons.filter((pokemon) => pokemon.type === 'Fire');
+    const buttonFire = screen.getByRole('button', { name: /Fire/i });
+    const buttonNext = screen.getByRole('button', { name: /Próximo pokémon/i });
+    userEvent.click(buttonFire);
+    pokemonsFire.forEach((pokemon) => {
+      const pokemonName = screen.getByText(`${pokemon.name}`);
+      const pokemonImg = screen.getByRole('img', { name: `${pokemon.name} sprite` });
+      expect(pokemonName).toBeInTheDocument();
+      expect(pokemonImg).toBeInTheDocument();
+      expect(pokemonImg.src).toBe(pokemon.image);
+      userEvent.click(buttonNext);
+    });
   });
 });
