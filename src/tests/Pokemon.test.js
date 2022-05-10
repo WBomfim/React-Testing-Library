@@ -7,6 +7,7 @@ import Pokemon from '../components/Pokemon';
 import pokemons from '../data';
 
 const pokemon = pokemons[0];
+const moreDetailsLink = 'More details';
 let favorite = false;
 
 describe('Testes do componente "Pokemon"', () => {
@@ -35,7 +36,7 @@ describe('Testes do componente "Pokemon"', () => {
     () => {
       renderWithRouter(<Pokemon pokemon={ pokemon } isFavorite={ favorite } />);
 
-      const pokemonDetailsLink = screen.getByRole('link', { name: 'More details' });
+      const pokemonDetailsLink = screen.getByRole('link', { name: moreDetailsLink });
       expect(pokemonDetailsLink).toHaveAttribute('href', `/pokemons/${pokemon.id}`);
     });
 
@@ -43,7 +44,7 @@ describe('Testes do componente "Pokemon"', () => {
     () => {
       renderWithRouter(<App />);
 
-      const pokemonDetailsLink = screen.getByRole('link', { name: 'More details' });
+      const pokemonDetailsLink = screen.getByRole('link', { name: moreDetailsLink });
       userEvent.click(pokemonDetailsLink);
 
       const pokemonDetailsTitle = screen.getByRole(
@@ -63,7 +64,7 @@ describe('Testes do componente "Pokemon"', () => {
         <Pokemon pokemon={ pokemon } isFavorite={ favorite } />,
       );
 
-      const pokemonDetailsLink = screen.getByRole('link', { name: 'More details' });
+      const pokemonDetailsLink = screen.getByRole('link', { name: moreDetailsLink });
       userEvent.click(pokemonDetailsLink);
 
       const { location: { pathname } } = history;
