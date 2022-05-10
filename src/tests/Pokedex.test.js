@@ -15,4 +15,29 @@ describe('Testes do componente "Pokedex', () => {
       );
       expect(heading).toBeInTheDocument();
     });
+
+  it('Verifica se a página exibe o próximo pokemon quando o botão próximo é clicado',
+    () => {
+      renderWithRouter(<App />);
+
+      const button = screen.getByRole('button', { name: /Próximo pokémon/i });
+      expect(button).toBeInTheDocument();
+
+      pokemons.forEach((pokemon, index) => {
+        const pokemonName = screen.getByText(`${pokemon.name}`);
+        const pokemonImg = screen.getByRole('img', { name: `${pokemon.name} sprite` });
+        expect(pokemonName).toBeInTheDocument();
+        expect(pokemonImg).toBeInTheDocument();
+        expect(pokemonImg.src).toBe(pokemons[index].image);
+        userEvent.click(button);
+
+        if (index === pokemons.length - 1) {
+          const pikachu = screen.getByText(/Pikachu/i);
+          const pikachuImg = screen.getByRole('img', { name: /Pikachu sprite/i });
+          expect(pikachu).toBeInTheDocument();
+          expect(pikachuImg).toBeInTheDocument();
+          expect(pikachuImg.src).toBe(pokemons[0].image);
+        }
+      });
+    });
 });
