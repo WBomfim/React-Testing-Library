@@ -77,4 +77,27 @@ describe('Testes do componente "Pokedex', () => {
       userEvent.click(buttonNext);
     });
   });
+
+  it('Verifica se a Pokédex contém um botão para resetar o filtro', () => {
+    renderWithRouter(<App />);
+
+    const pokemonType = screen.getByTestId('pokemon-type');
+    const pokemonName = screen.getByTestId('pokemon-name');
+    const buttonFire = screen.getByRole('button', { name: /Fire/i });
+    userEvent.click(buttonFire);
+    expect(pokemonType).toHaveTextContent(/Fire/i);
+    expect(pokemonName).toHaveTextContent(/Charmander/i);
+
+    const buttonAll = screen.getByRole('button', { name: /All/i });
+    userEvent.click(buttonAll);
+    expect(pokemonType).not.toHaveTextContent(/Fire/i);
+    expect(pokemonName).not.toHaveTextContent(/Charmander/i);
+
+    const buttonNext = screen.getByRole('button', { name: /Próximo pokémon/i });
+    pokemons.forEach((pokemon) => {
+      expect(pokemonType).toHaveTextContent(pokemon.type);
+      expect(pokemonName).toHaveTextContent(pokemon.name);
+      userEvent.click(buttonNext);
+    });
+  });
 });
