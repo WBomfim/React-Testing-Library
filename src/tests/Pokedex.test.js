@@ -5,7 +5,7 @@ import renderWithRouter from './renderWithRouter';
 import App from '../App';
 import pokemons from '../data';
 
-describe('Testes do componente "Pokedex', () => {
+describe('Testes do componente "Pokedex"', () => {
   it('Verifica se a página contém um heading h2 com o texto "Encountered pokémons"',
     () => {
       renderWithRouter(<App />);
