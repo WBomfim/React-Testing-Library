@@ -40,4 +40,10 @@ describe('Testes do componente "Pokedex', () => {
         }
       });
     });
+  it('Verifica se é mostrado apenas um pokémon por vez', () => {
+    renderWithRouter(<App />);
+
+    const pokemonName = screen.getAllByTestId('pokemon-name');
+    expect(pokemonName).toHaveLength(1);
+  });
 });
