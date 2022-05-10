@@ -1,6 +1,8 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import renderWithRouter from './renderWithRouter';
+import App from '../App';
 import Pokemon from '../components/Pokemon';
 import pokemons from '../data';
 
@@ -38,5 +40,23 @@ describe('Testes do componente "Pokemon', () => {
 
       const pokemonDetailsLink = screen.getByRole('link', { name: 'More details' });
       expect(pokemonDetailsLink).toHaveAttribute('href', `/pokemons/${pokemon.id}`);
+    });
+
+  it('Verifica se ao clicar no link é feito o redirecionamento para a página de detalhes',
+    () => {
+      renderWithRouter(<App />);
+
+      const pokemonDetailsLink = screen.getByRole('link', { name: 'More details' });
+      userEvent.click(pokemonDetailsLink);
+
+      const pokemonDetailsTitle = screen.getByRole(
+        'heading', { name: `${pokemons[0].name} Details` },
+      );
+      expect(pokemonDetailsTitle).toBeInTheDocument();
+
+      const pokemonLocationTitle = screen.getByRole(
+        'heading', { name: `Game Locations of ${pokemons[0].name}` },
+      );
+      expect(pokemonLocationTitle).toBeInTheDocument();
     });
 });
