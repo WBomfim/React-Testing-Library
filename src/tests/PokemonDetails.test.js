@@ -25,4 +25,32 @@ describe('Testes do componente "PokemonDetails"', () => {
       const summaryParagraph = screen.getByText(/hard berries with electricity to make/i);
       expect(summaryParagraph).toBeInTheDocument();
     });
+
+  it('Verifica se é exibido os mapas com as localizações de um pokemon', () => {
+    renderWithRouter(<App />);
+
+    const pokemonDetailsLink = screen.getByRole('link', { name: 'More details' });
+    userEvent.click(pokemonDetailsLink);
+
+    const pokemonLocationTitle = screen.getByRole(
+      'heading', { name: `Game Locations of ${pokemons[0].name}` },
+    );
+    expect(pokemonLocationTitle).toBeInTheDocument();
+
+    const locations = pokemons[0].foundAt;
+    const imgLocationMap = screen.getAllByRole(
+      'img', { name: `${pokemons[0].name} location` },
+    );
+    expect(imgLocationMap).toHaveLength(locations.length);
+
+    imgLocationMap.forEach((imgMap, index) => {
+      expect(imgMap).toHaveAttribute('src', locations[index].map);
+    });
+
+    locations.forEach((location) => {
+      const locationName = screen.getByText(location.location);
+      expect(locationName).toBeInTheDocument();
+    });
+
+  });
 });
